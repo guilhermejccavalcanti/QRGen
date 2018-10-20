@@ -1,7 +1,6 @@
 package net.glxn.qrgen.core.scheme;
 
 import java.util.Map;
-
 import static net.glxn.qrgen.core.scheme.SchemeUtil.getParameters;
 
 /**
@@ -9,12 +8,19 @@ import static net.glxn.qrgen.core.scheme.SchemeUtil.getParameters;
  * <code>WIFI:S:SSID;U:USER;P:PSK;E:EAP;PH:PHASE;;</code>
  */
 public class EnterpriseWifi extends Wifi {
+
     private static final String USER = "U";
+
     private static final String EAP = "E";
+
     private static final String PHASE = "PH";
+
     private String user;
+
     private String eap;
+
     private String phase;
+
     private boolean hidden = false;
 
     public EnterpriseWifi() {
@@ -22,12 +28,10 @@ public class EnterpriseWifi extends Wifi {
 
     public static EnterpriseWifi parse(final String wifiCode) {
         if (wifiCode == null || !wifiCode.startsWith(WIFI_PROTOCOL_HEADER)) {
-            throw new IllegalArgumentException(
-                    "this is not a valid WIFI code: " + wifiCode);
+            throw new IllegalArgumentException("this is not a valid WIFI code: " + wifiCode);
         }
         EnterpriseWifi wifi = new EnterpriseWifi();
-        Map<String, String> parameters = getParameters(
-                wifiCode.substring(WIFI_PROTOCOL_HEADER.length()), "(?<!\\\\);");
+        Map<String, String> parameters = getParameters(wifiCode.substring(WIFI_PROTOCOL_HEADER.length()), "(?<!\\\\);");
         if (parameters.containsKey(SSID)) {
             wifi.setSsid(unescape(parameters.get(SSID)));
         }
@@ -50,15 +54,11 @@ public class EnterpriseWifi extends Wifi {
     }
 
     public static String escape(final String text) {
-        return text.replace("\\", "\\\\").replace(",", "\\,")
-                .replace(";", "\\;").replace(".", "\\.")
-                .replace("\"", "\\\"").replace("'", "\\'");
+        return text.replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;").replace(".", "\\.").replace("\"", "\\\"").replace("\'", "\\\'");
     }
 
     public static String unescape(final String text) {
-        return text.replace("\\\\", "\\").replace("\\,", ",")
-                .replace("\\;", ";").replace("\\.", ".")
-                .replace("\\\"", "\"").replace("\\'", "'");
+        return text.replace("\\\\", "\\").replace("\\,", ",").replace("\\;", ";").replace("\\.", ".").replace("\\\"", "\"").replace("\\\'", "\'");
     }
 
     public EnterpriseWifi withUser(String user) {
